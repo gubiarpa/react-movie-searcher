@@ -1,19 +1,38 @@
-import './App.css'
-
 import { Movies } from './components/Movies'
 import { useMovies } from './hooks/useMovies'
+import { useSearch } from './hooks/useSearch'
+
+import './App.css'
 
 function App() {
 	const { movies } = useMovies()
+	const { search, updateSearch, error } = useSearch()
+
+	const handleSubmit = (event) => {
+		event.preventDefault()
+	}
+
+	const handleChange = (event) => {
+		updateSearch(event.target.value)
+	}
 
 	return (
 		<div className='page'>
 			<header>
 				<h1>Movie Searcher</h1>
-				<form className='form'>
-					<input placeholder='Avengers, Star Wars, The Matrix' />
+				<form
+					className='form'
+					onSubmit={handleSubmit}
+				>
+					<input
+						onChange={handleChange}
+						value={search}
+						name='query'
+						placeholder='Avengers, Star Wars, The Matrix'
+					/>
 					<button type='submit'>Search</button>
 				</form>
+				{error && <p style={{ color: 'red' }}>{error}</p>}
 			</header>
 
 			<main>
