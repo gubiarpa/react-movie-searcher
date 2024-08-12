@@ -5,8 +5,13 @@ import { useSearch } from './hooks/useSearch'
 import './App.css'
 
 function App() {
-	const { search, updateSearch, error } = useSearch()
-	const { movies, getMovies } = useMovies({ search })
+	const { search, updateSearch, error: searchError } = useSearch()
+	const {
+		movies,
+		getMovies,
+		loading,
+		error: moviesError,
+	} = useMovies({ search })
 
 	const handleSubmit = (event) => {
 		event.preventDefault()
@@ -33,12 +38,10 @@ function App() {
 					/>
 					<button type='submit'>Search</button>
 				</form>
-				{error && <p style={{ color: 'red' }}>{error}</p>}
+				{searchError && <p style={{ color: 'red' }}>{searchError}</p>}
 			</header>
 
-			<main>
-				<Movies movies={movies} />
-			</main>
+			<main>{loading ? <p>Loading...</p> : <Movies movies={movies} />}</main>
 		</div>
 	)
 }
