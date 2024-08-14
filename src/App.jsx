@@ -1,21 +1,27 @@
-import { Movies } from './components/Movies'
+import { useState } from 'react'
 import { useMovies } from './hooks/useMovies'
 import { useSearch } from './hooks/useSearch'
+import { Movies } from './components/Movies'
 
 import './App.css'
 
 function App() {
+	const [sort, setSort] = useState(false)
 	const { search, updateSearch, error: searchError } = useSearch()
 	const {
 		movies,
 		getMovies,
 		loading,
 		error: moviesError,
-	} = useMovies({ search })
+	} = useMovies({ search, sort })
 
 	const handleSubmit = (event) => {
 		event.preventDefault()
-		getMovies()
+		getMovies({ search })
+	}
+
+	const handleSort = () => {
+		setSort(!sort)
 	}
 
 	const handleChange = (event) => {
@@ -36,7 +42,17 @@ function App() {
 						name='query'
 						placeholder='Avengers, Star Wars, The Matrix'
 					/>
-					<button type='submit'>Search</button>
+					<input
+						type='checkbox'
+						onChange={handleSort}
+						checked={sort}
+					/>
+					<button
+						type='submit'
+						title='Sort by title'
+					>
+						Search
+					</button>
 				</form>
 				{searchError && <p style={{ color: 'red' }}>{searchError}</p>}
 			</header>
